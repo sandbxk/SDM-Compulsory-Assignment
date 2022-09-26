@@ -14,17 +14,25 @@ public class ReviewService : IReviewService
     public int GetNumberOfReviewsFromReviewer(int reviewer)
     {
         var reviews = _reviewRepository.GetReviews();
+
+        if (!reviews.Select(x => x.Reviewer).Contains(reviewer))
+        {
+            throw new ArgumentException("Reviewer does not exist");
+        }
+        
         return reviews.Select(x => x).Where(x => x.Reviewer == reviewer).Count();
     }
 
     public double GetAverageRateFromReviewer(int reviewer)
     {
-        var review = _reviewRepository.GetReviews().FindAll(x => x.Reviewer.Equals(reviewer));
-        if (review.Count == 0)
+        var reviews = _reviewRepository.GetReviews().FindAll(x => x.Reviewer.Equals(reviewer));
+      
+        if (!reviews.Select(x => x.Reviewer).Contains(reviewer))
         {
-            return 0;
+            throw new ArgumentException("Reviewer does not exist");
         }
-        return review.Average(x => x.Grade);
+        
+        return reviews.Average(x => x.Grade);
 
     }
 
