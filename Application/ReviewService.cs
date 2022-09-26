@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-
+using System.Linq;
 namespace Application;
 
 public class ReviewService : IReviewService
@@ -13,7 +13,8 @@ public class ReviewService : IReviewService
     
     public int GetNumberOfReviewsFromReviewer(int reviewer)
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews();
+        return reviews.Select(x => x).Where(x => x.Reviewer == reviewer).Count();
     }
 
     public double GetAverageRateFromReviewer(int reviewer)
