@@ -11,17 +11,23 @@ public class ServiceTests
     private List<Review> CreateTestReviews()
     {
         var reviews = new List<Review>();
+        //                           Reviewer ID   Movie ID   Rating     Date
         reviews.Add(new Review { Reviewer = 1, Movie = 1, Grade = 1, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 1, Movie = 2, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 1, Movie = 3, Grade = 2, Date = DateTime.Now });
+        
         reviews.Add(new Review { Reviewer = 2, Movie = 1, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 2, Movie = 3, Grade = 3, Date = DateTime.Now });
+        
         reviews.Add(new Review { Reviewer = 3, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 3, Movie = 3, Grade = 2, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 3, Movie = 1, Grade = 2, Date = DateTime.Now });
+        
         reviews.Add(new Review { Reviewer = 4, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 4, Movie = 3, Grade = 5, Date = DateTime.Now });
+        
         reviews.Add(new Review { Reviewer = 5, Movie = 3, Grade = 1, Date = DateTime.Now });
+        
         return reviews;
     }
 
@@ -38,7 +44,7 @@ public class ServiceTests
         Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
         mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
         var service = new ReviewService(mock.Object);
-
+        
         //Act
         var actual = service.GetNumberOfReviewsFromReviewer(reviewerId);
     
@@ -53,11 +59,8 @@ public class ServiceTests
     [InlineData(4, 4.5)]
     [InlineData(5, 1)]
     [InlineData(6, 0)]
-
     public void TestGetAverageRateFromReviewer(int id, double Expetced)
     {
-        
-        
         //Arrange
         Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
         mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
