@@ -19,7 +19,13 @@ public class ReviewService : IReviewService
 
     public double GetAverageRateFromReviewer(int reviewer)
     {
-        throw new NotImplementedException();
+        var review = _reviewRepository.GetReviews().FindAll(x => x.Reviewer.Equals(reviewer));
+        if (review.Count == 0)
+        {
+            return 0;
+        }
+        return review.Average(x => x.Grade);
+
     }
 
     public int GetNumberOfRatesByReviewer(int reviewer, int rate)

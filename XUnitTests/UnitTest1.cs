@@ -45,4 +45,29 @@ public class ServiceTests
         //Assert
         Assert.Equal(expectedCount, actual);    
     }
+
+    [Theory]
+    [InlineData(1, 2.667)]
+    [InlineData(2, 4)]
+    [InlineData(3, 2.667)]
+    [InlineData(4, 4.5)]
+    [InlineData(5, 1)]
+    [InlineData(6, 0)]
+
+    public void TestGetAverageRateFromReviewer(int id, double Expetced)
+    {
+        
+        
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        var service = new ReviewService(mock.Object);
+        
+        //Act
+        var actual = service.GetAverageRateFromReviewer(id);
+        
+        //Assert
+        Assert.Equal(Expetced, actual, 3);
+    }
+
 }
