@@ -22,6 +22,10 @@ public class ServiceTests
         reviews.Add(new Review { Reviewer = 4, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 4, Movie = 3, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 5, Movie = 3, Grade = 1, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 3, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 2, Grade = 4, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 1, Grade = 4, Date = DateTime.Now });
+
         return reviews;
     }
 
@@ -53,7 +57,6 @@ public class ServiceTests
     [InlineData(4, 4.5)]
     [InlineData(5, 1)]
     [InlineData(6, 0)]
-
     public void TestGetAverageRateFromReviewer(int id, double Expetced)
     {
         
@@ -69,5 +72,38 @@ public class ServiceTests
         //Assert
         Assert.Equal(Expetced, actual, 3);
     }
+
+    [Theory]
+    [InlineData(7, 1, 0)]  // 1 rate should return 0
+    [InlineData(7, 2, 1)]  // 2 rate should return 1
+    [InlineData(7, 4, 2)]  // 4 rate should return 2
+    public void GetNumberOfRatesByReviewerNoExecpt(int reviewer, int rate, int expectedCount)
+    {
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        var service = new ReviewService(mock.Object);
+        int actual;
+    
+        actual = service.GetNumberOfRatesByReviewer(reviewer, rate);
+
+        //Assert
+        Assert.Equal(expectedCount, actual);
+    }
+
+    [Theory]
+    [InlineData(7, -2)] // Negative rate should return 0
+    [InlineData(7, 0)]  // 0 rate should return 0
+    public void GetNumberOfRatesByReviewerExecpt(int reviewer, int rate)
+    {
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        var service = new ReviewService(mock.Object);
+
+        //Assert
+        Assert.Throws<ArgumentException>(() => service.GetNumberOfRatesByReviewer(reviewer, rate));
+    }
+
 
 }

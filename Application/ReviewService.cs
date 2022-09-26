@@ -30,7 +30,14 @@ public class ReviewService : IReviewService
 
     public int GetNumberOfRatesByReviewer(int reviewer, int rate)
     {
-        throw new NotImplementedException();
+        var review = _reviewRepository.GetReviews().FindAll(x => x.Reviewer.Equals(reviewer));
+        
+        if (rate <= 0 || rate > 5)
+        {
+            throw new ArgumentException("Rate must be between 1 and 5");
+        }
+
+        return review.Count(x => x.Grade == rate);
     }
 
     public int GetNumberOfReviews(int movie)
