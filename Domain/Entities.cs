@@ -1,6 +1,10 @@
 ﻿namespace Domain;
 
-public class Movie
+public class Review
 {
-    
+    public int Reviewer;
+    public int Movie;
+    public int Grade;
+    public DateTime Date;
 }
+
