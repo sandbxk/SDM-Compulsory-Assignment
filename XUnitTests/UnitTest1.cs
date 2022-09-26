@@ -51,6 +51,19 @@ public class ServiceTests
         //Assert
         Assert.Equal(expectedCount, actual);    
     }
+    
+    [Fact]
+    public void TestGetNumberOfReviewsFromReviwerThrowsException()
+    {
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        var service = new ReviewService(mock.Object);
+        
+        //Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => service.GetNumberOfReviewsFromReviewer(0));
+        Assert.Equal("Reviewer does not exist", exception.Message);
+    }
 
     [Theory]
     [InlineData(1, 2.667)]
@@ -58,7 +71,6 @@ public class ServiceTests
     [InlineData(3, 2.667)]
     [InlineData(4, 4.5)]
     [InlineData(5, 1)]
-    [InlineData(6, 0)]
     public void TestGetAverageRateFromReviewer(int id, double Expetced)
     {
         //Arrange
@@ -71,6 +83,19 @@ public class ServiceTests
         
         //Assert
         Assert.Equal(Expetced, actual, 3);
+    }
+    
+    [Fact]
+    public void TestGetAverageRateFromReviewerThrowsException()
+    {
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        var service = new ReviewService(mock.Object);
+        
+        //Act & Assert
+        var exception = Assert.Throws<ArgumentException>(() => service.GetAverageRateFromReviewer(-1));
+        Assert.Equal("Reviewer does not exist", exception.Message);
     }
 
 }
