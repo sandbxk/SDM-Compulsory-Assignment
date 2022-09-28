@@ -77,7 +77,27 @@ public class ReviewService : IReviewService
 
     public List<int> GetMoviesWithHighestNumberOfTopRates()
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews().FindAll(x => x.Grade == 5);
+
+        var currentMax = 0;
+        var currentMovies = new List<int>();
+        
+        var movieIds = reviews.Select(x => x.Movie).Distinct();
+        foreach (var movieId in movieIds)
+        {
+            var tempCount = reviews.Count(x => x.Movie == movieId);
+            if (tempCount == currentMax)
+            {
+                currentMax = tempCount;
+                currentMovies.Add(movieId);
+            } else if (tempCount > currentMax)
+            {
+                currentMovies = new List<int>();
+                currentMovies.Add(movieId);
+            }
+        }
+
+        return currentMovies;
     }
 
     public List<int> GetMostProductiveReviewers()

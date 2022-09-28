@@ -1,3 +1,4 @@
+using System.Reflection;
 using Application;
 using Application.Interfaces;
 using Domain;
@@ -21,31 +22,44 @@ public class ServiceTests
         reviews.Add(new Review { Reviewer = 1, Movie = 1, Grade = 1, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 1, Movie = 2, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 1, Movie = 3, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 1, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 1, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 2, Movie = 1, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 2, Movie = 3, Grade = 3, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 2, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 2, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 3, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 3, Movie = 3, Grade = 2, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 3, Movie = 1, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 3, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 3, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 4, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 4, Movie = 3, Grade = 5, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 4, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 4, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 5, Movie = 3, Grade = 1, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 5, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 5, Movie = 5, Grade = 2, Date = DateTime.Now });
+        
         reviews.Add(new Review { Reviewer = 7, Movie = 3, Grade = 2, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 1, Grade = 4, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 4, Grade = 5, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 5, Grade = 5, Date = DateTime.Now });
 
         return reviews;
     }
 
     [Theory]
-    [InlineData(1, 3)]
-    [InlineData(2, 2)]
-    [InlineData(3, 3)]
-    [InlineData(4, 2)]
-    [InlineData(5, 1)]
+    [InlineData(1, 5)]
+    [InlineData(2, 4)]
+    [InlineData(3, 5)]
+    [InlineData(4, 4)]
+    [InlineData(5, 3)]
     public void TestGetNumberOfReviewsFromReviewer(int reviewerId, int expectedCount)
     {   
         //Arrange
@@ -72,11 +86,11 @@ public class ServiceTests
     }
 
     [Theory]
-    [InlineData(1, 2.667)]
-    [InlineData(2, 4)]
-    [InlineData(3, 2.667)]
-    [InlineData(4, 4.5)]
-    [InlineData(5, 1)]
+    [InlineData(1, 2.4)]
+    [InlineData(2, 3)]
+    [InlineData(3, 2.4)]
+    [InlineData(4, 3.25)]
+    [InlineData(5, 1.667)]
     public void TestGetAverageRateFromReviewer(int id, double Expetced)
     {
         //Arrange
@@ -188,4 +202,15 @@ public class ServiceTests
         //Act & Assert
         Assert.Throws<ArgumentException>(() => service.GetNumberOfRates(movieId, rate));
     }
+
+    [Fact]
+    public void TestGetMoviesWithHighestNumberOfTopRates()
+    {
+        var service = GetMockService();
+
+        var actual = service.GetMoviesWithHighestNumberOfTopRates();
+        //Assert.True(actual.(new []{4, 5}));
+    }
+    
+    
 }
