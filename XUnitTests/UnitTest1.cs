@@ -40,7 +40,6 @@ public class ServiceTests
     [InlineData(3, 3)]
     [InlineData(4, 2)]
     [InlineData(5, 1)]
-    [InlineData(6, 0)]
     public void TestGetNumberOfReviewsFromReviewer(int reviewerId, int expectedCount)
     {   
         //Arrange
@@ -55,8 +54,11 @@ public class ServiceTests
         Assert.Equal(expectedCount, actual);    
     }
     
-    [Fact]
-    public void TestGetNumberOfReviewsFromReviwerThrowsException()
+    [Theory]
+    [InlineData(6)]
+    [InlineData(-1)]
+    [InlineData(0)]
+    public void TestGetNumberOfReviewsFromReviwerThrowsException(int id)
     {
         //Arrange
         Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
@@ -64,8 +66,7 @@ public class ServiceTests
         var service = new ReviewService(mock.Object);
         
         //Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => service.GetNumberOfReviewsFromReviewer(0));
-        Assert.Equal("Reviewer does not exist", exception.Message);
+        Assert.Throws<ArgumentException>(() => service.GetNumberOfReviewsFromReviewer(id));
     }
 
     [Theory]
