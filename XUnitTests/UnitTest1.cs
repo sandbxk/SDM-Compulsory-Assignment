@@ -7,6 +7,12 @@ namespace XUnitTests;
 
 public class ServiceTests
 {
+    private IReviewService GetMockService()
+    {
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
+        return new ReviewService(mock.Object);
+    }
 
     private List<Review> CreateTestReviews()
     {
@@ -43,9 +49,7 @@ public class ServiceTests
     public void TestGetNumberOfReviewsFromReviewer(int reviewerId, int expectedCount)
     {   
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
+        var service = GetMockService();
         
         //Act
         var actual = service.GetNumberOfReviewsFromReviewer(reviewerId);
@@ -61,9 +65,7 @@ public class ServiceTests
     public void TestGetNumberOfReviewsFromReviwerThrowsException(int id)
     {
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
+        var service = GetMockService();
         
         //Act & Assert
         Assert.Throws<ArgumentException>(() => service.GetNumberOfReviewsFromReviewer(id));
@@ -78,9 +80,7 @@ public class ServiceTests
     public void TestGetAverageRateFromReviewer(int id, double Expetced)
     {
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
+        var service = GetMockService();
         
         //Act
         var actual = service.GetAverageRateFromReviewer(id);
@@ -93,13 +93,10 @@ public class ServiceTests
     public void TestGetAverageRateFromReviewerThrowsException()
     {
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
+        var service = GetMockService();
         
         //Act & Assert
-        var exception = Assert.Throws<ArgumentException>(() => service.GetAverageRateFromReviewer(-1));
-        Assert.Equal("Reviewer does not exist", exception.Message);
+        Assert.Throws<ArgumentException>(() => service.GetAverageRateFromReviewer(-1));
     }
 
     [Theory]
@@ -109,12 +106,10 @@ public class ServiceTests
     public void GetNumberOfRatesByReviewerNoExecpt(int reviewer, int rate, int expectedCount)
     {
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
-        int actual;
+        var service = GetMockService();
     
-        actual = service.GetNumberOfRatesByReviewer(reviewer, rate);
+        //Act
+        int actual = service.GetNumberOfRatesByReviewer(reviewer, rate);
 
         //Assert
         Assert.Equal(expectedCount, actual);
@@ -126,9 +121,11 @@ public class ServiceTests
     public void GetNumberOfRatesByReviewerExecpt(int reviewer, int rate)
     {
         //Arrange
-        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
-        mock.Setup(repository => repository.GetReviews()).Returns(() => CreateTestReviews());
-        var service = new ReviewService(mock.Object);
+        var service = GetMockService();
+
+        //Act & Assert
+        Assert.Throws<ArgumentException>(() => GetMockService().GetNumberOfRatesByReviewer(reviewer, rate));
+    }
 
         //Assert
         Assert.Throws<ArgumentException>(() => service.GetNumberOfRatesByReviewer(reviewer, rate));
