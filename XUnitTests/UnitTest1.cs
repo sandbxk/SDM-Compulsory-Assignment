@@ -143,8 +143,21 @@ public class ServiceTests
         Assert.Equal(expectedReviewCount, actual);
     }
 
+    [Theory]
+    [InlineData(1 , 3)]
+    [InlineData(3 , 2.5)]
+    [InlineData(10, 0)] // movie may exist even though it does not have any reviews
+    public void TestGetAverageRateOfMovie(int movieId, double expectedReviewCount)
+    {
+        //Arrange
+        var service = GetMockService();
+
+        //Act
+        var actual = service.GetAverageRateOfMovie(movieId);
+
         //Assert
-        Assert.Throws<ArgumentException>(() => service.GetNumberOfRatesByReviewer(reviewer, rate));
+        Assert.Equal(expectedReviewCount, actual, 3);
+    }
     }
 
 

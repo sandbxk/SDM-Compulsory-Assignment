@@ -57,7 +57,12 @@ public class ReviewService : IReviewService
 
     public double GetAverageRateOfMovie(int movie)
     {
-        throw new NotImplementedException();
+        var review = _reviewRepository.GetReviews().FindAll(x => x.Movie == movie);
+
+        if (review.Count == 0)
+            return 0.0;
+
+        return review.Average(x => x.Grade);
     }
 
     public int GetNumberOfRates(int movie, int rate)
