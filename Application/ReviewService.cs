@@ -1,4 +1,4 @@
-﻿using Application.Interfaces;
+using Application.Interfaces;
 using System.Linq;
 namespace Application;
 
@@ -50,7 +50,9 @@ public class ReviewService : IReviewService
 
     public int GetNumberOfReviews(int movie)
     {
-        throw new NotImplementedException();
+        var review = _reviewRepository.GetReviews().FindAll(x => x.Movie == movie);
+
+        return review.Count;
     }
 
     public double GetAverageRateOfMovie(int movie)
