@@ -67,7 +67,12 @@ public class ReviewService : IReviewService
 
     public int GetNumberOfRates(int movie, int rate)
     {
-        throw new NotImplementedException();
+        if (rate <= 0 || rate >= 6)
+            throw new ArgumentException();
+
+        var review = _reviewRepository.GetReviews().FindAll(x => x.Movie == movie && x.Grade == rate);
+
+        return review.Count;
     }
 
     public List<int> GetMoviesWithHighestNumberOfTopRates()
