@@ -38,7 +38,7 @@ public class ServiceTests
         
         reviews.Add(new Review { Reviewer = 4, Movie = 2, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 4, Movie = 3, Grade = 5, Date = DateTime.Now });
-        reviews.Add(new Review { Reviewer = 4, Movie = 4, Grade = 2, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 4, Movie = 4, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 4, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 5, Movie = 3, Grade = 1, Date = DateTime.Now });
@@ -50,6 +50,7 @@ public class ServiceTests
         reviews.Add(new Review { Reviewer = 7, Movie = 1, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 4, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 5, Grade = 5, Date = DateTime.Now });
+        
 
         return reviews;
     }
@@ -89,9 +90,9 @@ public class ServiceTests
     [InlineData(1, 2.4)]
     [InlineData(2, 3)]
     [InlineData(3, 2.4)]
-    [InlineData(4, 3.25)]
+    [InlineData(4, 4)]
     [InlineData(5, 1.667)]
-    public void TestGetAverageRateFromReviewer(int id, double Expetced)
+    public void TestGetAverageRateFromReviewer(int id, double expected)
     {
         //Arrange
         var service = GetMockService();
@@ -100,7 +101,7 @@ public class ServiceTests
         var actual = service.GetAverageRateFromReviewer(id);
         
         //Assert
-        Assert.Equal(Expetced, actual, 3);
+        Assert.Equal(expected, actual, 3);
     }
     
     [Fact]
@@ -203,13 +204,28 @@ public class ServiceTests
         Assert.Throws<ArgumentException>(() => service.GetNumberOfRates(movieId, rate));
     }
 
+
+    /**
+     * From test reviews.
+     * Movie	Times graded as 5
+        1			1
+        2			1
+        3			1
+        4			2
+        5			1
+     */
     [Fact]
     public void TestGetMoviesWithHighestNumberOfTopRates()
     {
+        //Arrange
         var service = GetMockService();
 
+        //Act
         var actual = service.GetMoviesWithHighestNumberOfTopRates();
-        //Assert.True(actual.(new []{4, 5}));
+        
+        //Assert
+        Assert.Equal(4, actual[0]);
+        Assert.Equal(1, actual.Count);
     }
     
     

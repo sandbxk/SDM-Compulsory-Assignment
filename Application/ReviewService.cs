@@ -96,7 +96,6 @@ public class ReviewService : IReviewService
                 currentMovies.Add(movieId);
             }
         }
-
         return currentMovies;
     }
 
