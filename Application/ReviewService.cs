@@ -74,29 +74,21 @@ public class ReviewService : IReviewService
 
         return review.Count;
     }
-
+  
     public List<int> GetMoviesWithHighestNumberOfTopRates()
     {
         var reviews = _reviewRepository.GetReviews().FindAll(x => x.Grade == 5);
+    
+        List<(int id, int occurences)> idOccur = new();
 
-        var currentMax = 0;
-        var currentMovies = new List<int>();
-        
-        var movieIds = reviews.Select(x => x.Movie).Distinct();
-        foreach (var movieId in movieIds)
+        foreach (var unique in reviews.DistinctBy(x => x.Movie))
         {
-            var tempCount = reviews.Count(x => x.Movie == movieId);
-            if (tempCount == currentMax)
-            {
-                currentMax = tempCount;
-                currentMovies.Add(movieId);
-            } else if (tempCount > currentMax)
-            {
-                currentMovies = new List<int>();
-                currentMovies.Add(movieId);
-            }
+            idOccur.Add((unique.Movie, reviews.Count(x => x.Movie == unique.Movie)));    
         }
-        return currentMovies;
+
+        int maxOccurence = idOccur.Max(x => x.occurences);
+
+        return idOccur.Where(x => x.occurences == maxOccurence).Select(x => x.id).ToList();
     }
 
     public List<int> GetMostProductiveReviewers()
