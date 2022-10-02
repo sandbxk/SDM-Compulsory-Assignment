@@ -111,11 +111,34 @@ public class ReviewService : IReviewService
 
     public List<int> GetTopMoviesByReviewer(int reviewer)
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews().FindAll(x => x.Reviewer == reviewer);
+        if (reviews.Count == 0)
+            throw new ArgumentException("Reviewer does not exist");
+
+        reviews.Sort((x, y) =>
+        { 
+            var ret = y.Grade.CompareTo(x.Grade);
+            if (ret == 0) ret = y.Date.CompareTo(x.Date);
+            return ret;
+        });
+        
+        return reviews.Select(x => x.Movie).ToList();
     }
 
     public List<int> GetReviewersByMovie(int movie)
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews().FindAll(x => x.Movie == movie);
+        if (reviews.Count == 0)
+            throw new ArgumentException("Movie does not exist");
+        
+
+        reviews.Sort((x, y) =>
+        { 
+            var ret = y.Grade.CompareTo(x.Grade);
+            if (ret == 0) ret = y.Date.CompareTo(x.Date);
+            return ret;
+        });
+
+        return reviews.Select(x => x.Reviewer).ToList();
     }
 }

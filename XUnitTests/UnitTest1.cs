@@ -46,7 +46,7 @@ public class ServiceTests
         reviews.Add(new Review { Reviewer = 5, Movie = 5, Grade = 2, Date = DateTime.Now });
         
         reviews.Add(new Review { Reviewer = 7, Movie = 3, Grade = 2, Date = DateTime.Now });
-        reviews.Add(new Review { Reviewer = 7, Movie = 2, Grade = 4, Date = DateTime.Now });
+        reviews.Add(new Review { Reviewer = 7, Movie = 2, Grade = 4, Date = DateTime.Now.Subtract(TimeSpan.FromDays(1)) });
         reviews.Add(new Review { Reviewer = 7, Movie = 1, Grade = 4, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 4, Grade = 5, Date = DateTime.Now });
         reviews.Add(new Review { Reviewer = 7, Movie = 5, Grade = 5, Date = DateTime.Now });
@@ -224,8 +224,79 @@ public class ServiceTests
         var actual = service.GetMoviesWithHighestNumberOfTopRates();
         
         //Assert
+        Assert.NotNull(actual);
         Assert.Equal(4, actual[0]);
-        Assert.Equal(1, actual.Count);
+        Assert.Single(actual);
+    }
+
+    public void TestGetMostProductiveReviewers()
+    {
+        
+    }
+    
+    public void TestGetTopRatedMovies(int amount)
+    {
+        
+    }
+    
+    [Theory]
+    [InlineData(1, new int[]{2, 5, 4, 3, 1})]
+    [InlineData(2, new int[]{1, 3, 5, 4})]
+    [InlineData(3, new int[]{2, 5, 4, 1, 3})]
+    [InlineData(4, new int[]{4, 3, 2, 5})]
+    [InlineData(5, new int[]{5, 4, 3})]
+    [InlineData(7, new int[]{5, 4, 1, 2, 3})] 
+    public void TestGetTopMoviesByReviewer(int reviewer, int[] movies)
+    {
+        //Arrange
+        var service = GetMockService();
+
+        //Act
+        var actual = service.GetTopMoviesByReviewer(reviewer);
+
+        //Assert
+        Assert.Equal(movies, actual);
+
+    }
+    
+    [Fact]
+    public void TestGetTopMoviesByReviewerThrowsException()
+    {
+        //Arrange
+        var service = GetMockService();
+
+        //Act & Assert
+        Exception e = Assert.Throws<ArgumentException>(() => service.GetTopMoviesByReviewer(9));
+        Assert.Equal("Reviewer does not exist", e.Message);
+    }
+    
+    
+    [Theory]
+    [InlineData(1, new int[] {2, 7, 3, 1} )] //grades: 5, 4, 2, 1
+    [InlineData(2, new int[] {1, 4, 3, 7} )] //grades: 5, 4, 4, 4 where reviewer 7's review is one day older
+    [InlineData(3, new int[] {4, 2, 7, 3, 1, 5} )] //grades: 5, 3, 2, 2, 2, 1 where reviewer 7's review is one day older
+    public void TestGetReviewersByMovie(int movieId, int[] expectedReviewerIds)
+    {
+        //Arrange
+        var service = GetMockService();
+        
+        //Act
+        var actual = service.GetReviewersByMovie(movieId);
+        
+        //Assert
+        Assert.NotNull(actual);
+        Assert.Equal(expectedReviewerIds, actual);
+    }
+
+    [Fact]
+    public void TestGetReviewersByMovieThrowsException()
+    {
+        //Arrange
+        var service = GetMockService();
+        
+        //Act & Assert
+        Exception e = Assert.Throws<ArgumentException>(() => service.GetReviewersByMovie(6));
+        Assert.Equal("Movie does not exist", e.Message);
     }
     
     
