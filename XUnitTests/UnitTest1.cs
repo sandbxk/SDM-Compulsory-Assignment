@@ -213,14 +213,16 @@ public class ServiceTests
     }
 
     [Theory]
-    [InlineData(1)]
-    public void TestGetTopRatedMovies(int reviewer)
+    [InlineData(1, 2, 3)]
+    public void TestGetTopRatedMovies(int reviewer, int firstMovieExp, int lastMovieExp)
     {
         var service = GetMockService();
 
         var actual = service.GetTopRatedMovies(reviewer);
         
-        
+        Assert.Equal(actual.First(), firstMovieExp);
+        Assert.Equal(actual.Last(), lastMovieExp);
+
     }
     
 }

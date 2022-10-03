@@ -107,6 +107,9 @@ public class ReviewService : IReviewService
 
     public List<int> GetTopRatedMovies(int amount)
     {
+
+        var movies = _reviewRepository.GetReviews().FindAll(x => x.Movie == amount);
+        
         List<int> list = new List<int>();
         for (int i = 1; i < 6; i++)
         {
