@@ -93,12 +93,34 @@ public class ReviewService : IReviewService
 
     public List<int> GetMostProductiveReviewers()
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews();
+        
+        List<(int id, int occurences)> idOccur = new();
+        
+        foreach (var unique in reviews.DistinctBy(review => review.Reviewer))
+        {
+            idOccur.Add((unique.Reviewer, reviews.Count(x => x.Reviewer == unique.Reviewer)));    
+        }
+        
+        idOccur.Sort((tuple, valueTuple) => valueTuple.occurences.CompareTo(tuple.occurences));
+        
+        return idOccur.Select(x => x.id).ToList();
     }
 
     public List<int> GetTopRatedMovies(int amount)
     {
-        throw new NotImplementedException();
+        var reviews = _reviewRepository.GetReviews();
+        
+        List<(int id, double average)> idOccur = new();
+        
+        foreach (var unique in reviews.DistinctBy(review => review.Movie))
+        {
+            idOccur.Add((unique.Movie, reviews.Where(x => x.Movie == unique.Movie).Average(x => x.Grade)));    
+        }
+        
+        idOccur.Sort((tuple, valueTuple) => valueTuple.average.CompareTo(tuple.average));
+        
+        return idOccur.Select(x => x.id).Take(amount).ToList();
     }
 
     public List<int> GetTopMoviesByReviewer(int reviewer)

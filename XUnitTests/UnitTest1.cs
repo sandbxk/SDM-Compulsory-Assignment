@@ -229,14 +229,58 @@ public class ServiceTests
         Assert.Single(actual);
     }
 
+    [Fact]
     public void TestGetMostProductiveReviewers()
     {
+        //Arrange
+        var service = GetMockService();
         
+        //Act
+        var actual = service.GetMostProductiveReviewers();
+        
+        //Assert
+        Assert.NotNull(actual);
+        Assert.Equal(6, actual.Count);
+        Assert.Equal(1, actual[0]);
+        Assert.Equal(3, actual[1]);
+        Assert.Equal(7, actual[2]);
+        Assert.Equal(2, actual[3]);
+        Assert.Equal(4, actual[4]);
+        Assert.Equal(5, actual[5]);
+
     }
     
-    public void TestGetTopRatedMovies(int amount)
+    /**
+     * From test reviews.
+     * Movies        Average rate
+        1			    3
+        2			    4,25
+        3			    2,5
+        4			    3
+        5			    2,5
+     */
+    [Theory]
+    [InlineData(1, new int[] {2})]
+    [InlineData(2, new int[] {2, 1})]
+    [InlineData(3, new int[] {2, 1, 4})]
+    [InlineData(4, new int[] {2, 1, 4, 3})]
+    [InlineData(5, new int[] {2, 1, 4, 3, 5})]
+    public void TestGetTopRatedMovies(int amount, int[] expectedValues)
     {
+        //Arrange
+        var service = GetMockService();
         
+        //Act
+        var actual = service.GetTopRatedMovies(amount);
+        
+        //Assert
+        Assert.NotNull(actual);
+        Assert.Equal(expectedValues.Length, actual.Count);
+        for (int i = 0; i < expectedValues.Length; i++)
+        {
+            Assert.Equal(expectedValues[i], actual[i]);
+        }
+
     }
     
     [Theory]
