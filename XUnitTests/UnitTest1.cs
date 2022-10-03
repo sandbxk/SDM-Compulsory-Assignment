@@ -211,6 +211,16 @@ public class ServiceTests
         var actual = service.GetMoviesWithHighestNumberOfTopRates();
         //Assert.True(actual.(new []{4, 5}));
     }
-    
+
+    [Theory]
+    [InlineData(1)]
+    public void TestGetTopRatedMovies(int reviewer)
+    {
+        var service = GetMockService();
+
+        var actual = service.GetTopRatedMovies(reviewer);
+        
+        
+    }
     
 }

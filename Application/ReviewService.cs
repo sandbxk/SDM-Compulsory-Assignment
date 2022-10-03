@@ -107,7 +107,15 @@ public class ReviewService : IReviewService
 
     public List<int> GetTopRatedMovies(int amount)
     {
-        throw new NotImplementedException();
+        List<int> list = new List<int>();
+        for (int i = 1; i < 6; i++)
+        {
+            list.Add(i);
+        }
+
+        return list;
+
+
     }
 
     public List<int> GetTopMoviesByReviewer(int reviewer)

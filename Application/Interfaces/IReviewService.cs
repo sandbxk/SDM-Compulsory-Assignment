@@ -29,7 +29,7 @@ public interface IReviewService
     /// </summary>
     /// <param name="amount"></param>
     /// <returns></returns>
-    List<int> GetTopRatedMovies(int amount);
+    List<int> GetTopRatedMovies(int reviewer);
 
     /// <summary>
     /// On input N, what are the movies that reviewer N has reviewed? The list should
