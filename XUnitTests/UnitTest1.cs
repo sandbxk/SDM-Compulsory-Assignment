@@ -55,6 +55,18 @@ public class ServiceTests
         return reviews;
     }
 
+    [Fact]
+    public void TestServiceConstructor()
+    {
+        //Arrange + Act
+        var service = GetMockService();
+        
+        //Assert
+        Assert.IsType<ReviewService>(service);
+        Assert.NotNull(service);
+    }
+    
+    
     [Theory]
     [InlineData(1, 5)]
     [InlineData(2, 4)]
