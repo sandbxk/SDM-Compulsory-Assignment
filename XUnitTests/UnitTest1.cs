@@ -236,9 +236,28 @@ public class ServiceTests
         var actual = service.GetMoviesWithHighestNumberOfTopRates();
         
         //Assert
-        Assert.NotNull(actual);
-        Assert.Equal(4, actual[0]);
-        Assert.Single(actual);
+        Assert.Equal(new List<int>() {4}, actual);
+    }
+
+    [Fact]
+    public void TestEmptyGetMoviesWithHighestNumberOfTopRates()
+    {
+        //Arrange
+        Mock<IReviewRepository> mock = new Mock<IReviewRepository>();
+        mock.Setup(repository => repository.GetReviews()).Returns(() => new List<Review>(){
+            new Review() { Reviewer = 1, Movie = 1, Grade = 1, Date = DateTime.Now },
+            new Review() { Reviewer = 2, Movie = 2, Grade = 2, Date = DateTime.Now },
+            new Review() { Reviewer = 3, Movie = 3, Grade = 3, Date = DateTime.Now },
+            new Review() { Reviewer = 4, Movie = 4, Grade = 4, Date = DateTime.Now },
+        });
+        
+        var service = new ReviewService(mock.Object);
+
+        //Act
+        var actual = service.GetMoviesWithHighestNumberOfTopRates();
+        
+        //Assert
+        Assert.Equal(new List<int>(), actual);
     }
 
     [Fact]

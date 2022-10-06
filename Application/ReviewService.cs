@@ -79,6 +79,9 @@ public class ReviewService : IReviewService
     {
         var reviews = _reviewRepository.GetReviews().FindAll(x => x.Grade == 5);
     
+        if (reviews.Count == 0)
+            return new List<int>();
+
         List<(int id, int occurences)> idOccur = new();
 
         foreach (var unique in reviews.DistinctBy(x => x.Movie))
