@@ -111,16 +111,16 @@ public class ReviewService : IReviewService
     {
         var reviews = _reviewRepository.GetReviews();
         
-        List<(int id, double average)> idOccur = new();
+        List<(int id, double average)> idAverage = new();
         
         foreach (var unique in reviews.DistinctBy(review => review.Movie))
         {
-            idOccur.Add((unique.Movie, reviews.Where(x => x.Movie == unique.Movie).Average(x => x.Grade)));    
+            idAverage.Add((unique.Movie, reviews.Where(x => x.Movie == unique.Movie).Average(x => x.Grade)));    
         }
         
-        idOccur.Sort((tuple, valueTuple) => valueTuple.average.CompareTo(tuple.average));
+        idAverage.Sort((tuple, valueTuple) => valueTuple.average.CompareTo(tuple.average));
         
-        return idOccur.Select(x => x.id).Take(amount).ToList();
+        return idAverage.Select(x => x.id).Take(amount).ToList();
     }
 
     public List<int> GetTopMoviesByReviewer(int reviewer)
