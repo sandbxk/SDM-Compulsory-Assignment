@@ -277,6 +277,7 @@ public class ServiceTests
     [InlineData(3, new int[] {2, 1, 4})]
     [InlineData(4, new int[] {2, 1, 4, 3})]
     [InlineData(5, new int[] {2, 1, 4, 3, 5})]
+    [InlineData(6, new int[] {2, 1, 4, 3, 5})]
     public void TestGetTopRatedMovies(int amount, int[] expectedValues)
     {
         //Arrange
@@ -301,7 +302,7 @@ public class ServiceTests
     [InlineData(3, new int[]{2, 5, 4, 1, 3})]
     [InlineData(4, new int[]{4, 3, 2, 5})]
     [InlineData(5, new int[]{5, 4, 3})]
-    [InlineData(7, new int[]{5, 4, 1, 2, 3})] 
+    [InlineData(7, new int[]{5, 4, 1, 2, 3})]
     public void TestGetTopMoviesByReviewer(int reviewer, int[] movies)
     {
         //Arrange
